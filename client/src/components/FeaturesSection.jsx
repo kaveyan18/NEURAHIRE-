@@ -1,105 +1,145 @@
 import { motion } from 'framer-motion';
 
-const iconKeyword = (
-  <svg className="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.5 3.5l1 1m0 0L12 6m-1.5-1.5L9 6m6.5-2.5l1 1m0 0L18 6m-1.5-1.5L15 6M3 10h18M3 14h18M7 18h10" />
-  </svg>
-);
-
-const iconScore = (
-  <svg className="w-6 h-6 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-  </svg>
-);
-
-const iconBench = (
-  <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-  </svg>
-);
-
 const features = [
   {
-    icon: iconKeyword,
-    tag: 'Smart Detection',
-    title: 'Keyword Gap Analysis',
-    description: 'Our AI instantly surfaces the exact hard and soft skills recruiters are filtering for in your specific niche, with semantic understanding that goes beyond simple string matching.',
-    color: 'indigo',
+    title: 'Keyword gap analysis',
+    desc: "Instantly surfaces the exact keywords recruiters and ATS systems are scanning for — and shows you what's missing.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--purple-light)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 18 }}>
+        <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+      </svg>
+    ),
   },
   {
-    icon: iconScore,
-    tag: 'Data Driven',
-    title: 'Impact Scorecard',
-    description: 'We quantify your achievements using data-driven metrics that make your contributions undeniable. Transform vague bullets into powerful, measurable outcomes.',
-    color: 'violet',
+    title: 'Match score engine',
+    desc: 'A precision score from 0–100 showing how well your resume aligns to any specific job description in seconds.',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--purple-light)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 18 }}>
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+      </svg>
+    ),
   },
   {
-    icon: iconBench,
-    tag: 'Competitive Edge',
-    title: 'AI Benchmarking',
-    description: 'Compare your profile against thousands of successful hires at FAANG and top-tier startups. Know exactly where you stand and what to fix first.',
-    color: 'purple',
+    title: 'Actionable rewrites',
+    desc: 'Not just scores — specific, concrete suggestions on exactly what to rewrite, add, or remove from each section.',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--purple-light)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 18 }}>
+        <path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
+      </svg>
+    ),
+  },
+  {
+    title: 'ATS compatibility',
+    desc: "Checks formatting and structure against real ATS parsers so your resume doesn't get filtered before a human ever reads it.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--purple-light)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 18 }}>
+        <rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" />
+      </svg>
+    ),
+  },
+  {
+    title: 'Recruiter lens',
+    desc: 'See your resume the way a hiring manager sees it — with attention heatmaps and first-impression analysis built in.',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--purple-light)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 18 }}>
+        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" />
+        <path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" />
+      </svg>
+    ),
+  },
+  {
+    title: 'Progress tracking',
+    desc: 'Track your score improvements across multiple resume versions and job applications over time in one dashboard.',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--purple-light)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 18 }}>
+        <path d="M18 20V10" /><path d="M12 20V4" /><path d="M6 20v-6" />
+      </svg>
+    ),
   },
 ];
 
-const colorMap = {
-  indigo: { bg: 'bg-indigo-500/10', border: 'border-indigo-500/20', tag: 'text-indigo-400 bg-indigo-500/10', glow: 'shadow-indigo-500/10' },
-  violet: { bg: 'bg-violet-500/10', border: 'border-violet-500/20', tag: 'text-violet-400 bg-violet-500/10', glow: 'shadow-violet-500/10' },
-  purple: { bg: 'bg-purple-500/10', border: 'border-purple-500/20', tag: 'text-purple-400 bg-purple-500/10', glow: 'shadow-purple-500/10' },
-};
-
-function FeatureCard({ feature, index }) {
-  const c = colorMap[feature.color];
+function FeatureCard({ feature, delay }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.6, delay: index * 0.15 }}
-      whileHover={{ y: -6, transition: { duration: 0.25 } }}
-      className={`glass-card rounded-2xl p-7 flex flex-col gap-5 border ${c.border} hover:shadow-xl ${c.glow} transition-shadow duration-300`}
+      transition={{ duration: 0.55, delay }}
+      className="feat-card"
+      style={{
+        background: 'var(--bg2)',
+        border: '1px solid var(--border)',
+        borderRadius: 14,
+        padding: 28,
+      }}
     >
-      <div className={`w-12 h-12 rounded-xl ${c.bg} flex items-center justify-center`}>
+      {/* Icon box */}
+      <div
+        style={{
+          width: 38,
+          height: 38,
+          background: 'var(--purple-dim)',
+          border: '1px solid var(--border2)',
+          borderRadius: 9,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginBottom: 20,
+        }}
+      >
         {feature.icon}
       </div>
-      <div>
-        <span className={`text-xs font-semibold uppercase tracking-wide px-2 py-1 rounded-md ${c.tag}`}>
-          {feature.tag}
-        </span>
-      </div>
-      <div>
-        <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
-        <p className="text-slate-400 text-sm leading-relaxed">{feature.description}</p>
-      </div>
+
+      <h3
+        className="nh-font-display"
+        style={{ fontSize: 15, fontWeight: 700, marginBottom: 10, letterSpacing: '-0.2px', color: 'var(--white)' }}
+      >
+        {feature.title}
+      </h3>
+      <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300 }}>
+        {feature.desc}
+      </p>
     </motion.div>
   );
 }
 
 export default function FeaturesSection() {
   return (
-    <section id="features" className="py-24 px-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="text-center mb-16"
-        >
-          <p className="text-xs text-indigo-400 uppercase tracking-[0.2em] mb-4 font-medium">Why NeuraHire</p>
-          <h2 className="text-4xl lg:text-5xl font-bold text-white mb-5">Master the ATS Landscape</h2>
-          <p className="text-slate-400 text-lg max-w-xl mx-auto leading-relaxed">
-            Our proprietary AI doesn't just read your resume; it understands the semantic requirements of your industry's leading employers.
-          </p>
-        </motion.div>
+    <section
+      id="features"
+      style={{ position: 'relative', zIndex: 1, padding: '100px 56px', maxWidth: 1100, margin: '0 auto' }}
+    >
+      <motion.p
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        style={{ fontSize: 11, letterSpacing: '1.4px', textTransform: 'uppercase', color: 'var(--purple-light)', marginBottom: 16, fontWeight: 500 }}
+      >
+        What we do
+      </motion.p>
 
-        {/* Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {features.map((f, i) => (
-            <FeatureCard key={f.title} feature={f} index={i} />
-          ))}
-        </div>
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.1 }}
+        className="nh-font-display"
+        style={{ fontSize: 'clamp(28px, 3.5vw, 42px)', fontWeight: 700, letterSpacing: '-1px', lineHeight: 1.1, maxWidth: 480, marginBottom: 56 }}
+      >
+        Everything your resume needs to win.
+      </motion.h2>
+
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: 16,
+        }}
+        className="block"
+      >
+        {features.map((f, i) => (
+          <FeatureCard key={f.title} feature={f} delay={i * 0.08} />
+        ))}
       </div>
     </section>
   );

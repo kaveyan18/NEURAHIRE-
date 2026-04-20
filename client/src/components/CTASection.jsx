@@ -1,49 +1,90 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 export default function CTASection() {
   return (
-    <section className="py-24 px-6">
-      <div className="max-w-4xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.7 }}
-          className="relative glow-border rounded-3xl p-12 text-center overflow-hidden"
-          style={{ background: 'linear-gradient(145deg, rgba(99,102,241,0.05) 0%, rgba(139,92,246,0.05) 100%)' }}
-        >
-          {/* Background radial glow */}
+    <section style={{ position: 'relative', zIndex: 1, padding: '0 56px 100px' }}>
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-60px' }}
+        transition={{ duration: 0.65 }}
+        style={{
+          position: 'relative',
+          border: '1px solid var(--border2)',
+          borderRadius: 20,
+          padding: '72px 56px',
+          textAlign: 'center',
+          background: 'var(--purple-dim2)',
+          overflow: 'hidden',
+          maxWidth: 1100,
+          margin: '0 auto',
+        }}
+      >
+        {/* Glow behind heading */}
+        <div
+          style={{
+            position: 'absolute',
+            top: -100,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: 400,
+            height: 300,
+            background: 'rgba(124,111,247,0.12)',
+            borderRadius: '50%',
+            filter: 'blur(60px)',
+            pointerEvents: 'none',
+          }}
+        />
+
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          {/* Score chip */}
           <div
-            className="absolute inset-0 pointer-events-none"
             style={{
-              background: 'radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.12) 0%, transparent 70%)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
+              background: 'rgba(79,209,197,0.1)',
+              border: '1px solid rgba(79,209,197,0.22)',
+              borderRadius: 100,
+              padding: '6px 14px 6px 8px',
+              fontSize: 12,
+              color: 'var(--teal)',
+              fontWeight: 500,
+              marginBottom: 20,
             }}
-          />
-
-          <div className="relative z-10 flex flex-col items-center gap-6">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-400 border border-indigo-500/30 bg-indigo-500/10 px-4 py-2 rounded-full">
-              Join the waitlist today
+          >
+            <span
+              style={{
+                background: 'var(--teal)',
+                color: '#0d0c18',
+                fontWeight: 700,
+                fontSize: 11,
+                padding: '2px 8px',
+                borderRadius: 100,
+              }}
+            >
+              94
             </span>
-
-            <h2 className="text-4xl lg:text-5xl font-bold text-white max-w-xl leading-tight">
-              Ready to outsmart the algorithms?
-            </h2>
-
-            <p className="text-slate-400 text-lg max-w-md leading-relaxed">
-              Your next career milestone is just one scan away. Join{' '}
-              <span className="text-white font-semibold">50,000+</span> professionals who used Luminary to land interviews.
-            </p>
-
-            <button className="btn-gradient text-white font-semibold px-10 py-4 rounded-full text-base shadow-xl shadow-indigo-500/30 hover:shadow-indigo-500/50 transition-shadow">
-              Get Analyzed Free
-            </button>
-
-            <p className="text-slate-600 text-xs">
-              No credit card required. PDF &amp; DOCX supported.
-            </p>
+            Avg match score achieved
           </div>
-        </motion.div>
-      </div>
+
+          <h2
+            className="nh-font-display"
+            style={{ fontSize: 'clamp(26px, 3vw, 38px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: 14 }}
+          >
+            Your next interview starts here.
+          </h2>
+
+          <p style={{ fontSize: 15, color: 'var(--muted)', marginBottom: 36, fontWeight: 300 }}>
+            Join 50,000+ professionals who have already optimized their resumes with NeuraHire.
+          </p>
+
+          <Link to="/dashboard" className="btn-gradient" style={{ textDecoration: 'none', display: 'inline-block' }}>
+            Get Analyzed Free
+          </Link>
+        </div>
+      </motion.div>
     </section>
   );
 }
