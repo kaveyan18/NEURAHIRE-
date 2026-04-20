@@ -126,42 +126,7 @@ NEURAHIRE-/
 └── package.json                # Root scripts
 ```
 
----
 
-## 🔌 API Endpoints
-
-### Auth
-| Method | Endpoint | Description |
-|---|---|---|
-| `POST` | `/api/auth/register` | Register a new user |
-| `POST` | `/api/auth/login` | Login and receive JWT |
-
-### Analysis
-| Method | Endpoint | Auth Required | Description |
-|---|---|---|---|
-| `POST` | `/api/analyse` | ✅ Yes | Upload resume PDF + job description, returns AI analysis |
-
-#### Request (`multipart/form-data`)
-```
-resume         — PDF file (max 5 MB)
-jobDescription — Plain text job description
-```
-
-#### Response
-```json
-{
-  "score": 78,
-  "matched_keywords": ["React", "Node.js", "REST API"],
-  "missing_keywords": ["Docker", "Kubernetes"],
-  "suggestions": [
-    "Quantify your achievements with metrics to stand out.",
-    "Add experience with containerization tools like Docker.",
-    "Tailor your summary to match the target role more closely."
-  ]
-}
-```
-
----
 
 ## 🎨 UI Design
 
@@ -175,16 +140,6 @@ The application uses a **professional light + dark hybrid** design system:
 
 ---
 
-## 🔑 Environment Variables Reference
-
-| Variable | Description |
-|---|---|
-| `MONGO_URI` | MongoDB connection string (Atlas or local) |
-| `JWT_SECRET` | Secret key for signing JSON Web Tokens |
-| `GEMINI_API_KEY` | Google Gemini API key for AI analysis |
-
----
-
 ## 📜 License
 
 This project is open source and available under the [MIT License](LICENSE).
@@ -192,6 +147,5 @@ This project is open source and available under the [MIT License](LICENSE).
 ---
 
 <div align="center">
-  <p>Built with ❤️ by <a href="https://github.com/kaveyan18">kaveyan18</a></p>
-  <p>Powered by <strong>Google Gemini 2.5 Flash</strong> · MERN Stack</p>
+  <p>Built with ❤️ by <a href="https://github.com/kaveyan18">kaveyan</a></p>
 </div>
