@@ -108,7 +108,7 @@ export default function Navbar() {
         </Link>
 
         {/* ── Desktop nav links ── */}
-        <ul style={{ display: 'flex', gap: 32, listStyle: 'none', padding: 0, margin: 0 }} className="hidden md:flex">
+        <ul style={{ gap: 32, listStyle: 'none', padding: 0, margin: 0 }} className="navbar-desktop-links">
           {(isDashboard ? dashboardLinks : landingLinks).map(({ label, href, to }) => (
             <li key={label}>
               {to ? (
@@ -117,13 +117,13 @@ export default function Navbar() {
                   style={{
                     textDecoration: 'none',
                     fontSize: 13,
-                    color: location.pathname === to ? '#fff' : 'rgba(255,255,255,0.55)',
+                    color: location.pathname === to ? '#fff' : '#a89af9',
                     fontWeight: location.pathname === to ? 600 : 400,
                     transition: 'color 0.2s',
                     position: 'relative',
                   }}
                   onMouseEnter={e => (e.target.style.color = '#fff')}
-                  onMouseLeave={e => (e.target.style.color = location.pathname === to ? '#fff' : 'rgba(255,255,255,0.55)')}
+                  onMouseLeave={e => (e.target.style.color = location.pathname === to ? '#fff' : '#a89af9')}
                 >
                   {label}
                   {location.pathname === to && (
@@ -144,12 +144,12 @@ export default function Navbar() {
                   style={{
                     textDecoration: 'none',
                     fontSize: 13,
-                    color: 'rgba(255,255,255,0.55)',
+                    color: '#a89af9',
                     fontWeight: 400,
                     transition: 'color 0.2s',
                   }}
                   onMouseEnter={e => (e.target.style.color = '#fff')}
-                  onMouseLeave={e => (e.target.style.color = 'rgba(255,255,255,0.55)')}
+                  onMouseLeave={e => (e.target.style.color = '#a89af9')}
                 >
                   {label}
                 </a>
@@ -159,7 +159,7 @@ export default function Navbar() {
         </ul>
 
         {/* ── Desktop right side ── */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }} className="hidden md:flex">
+        <div className="navbar-desktop-actions" style={{ alignItems: 'center', gap: 12 }}>
           {isAuthenticated ? (
             <>
               {/* Start New Analysis CTA (only if NOT on analyse page) */}
@@ -281,8 +281,8 @@ export default function Navbar() {
 
         {/* ── Mobile hamburger ── */}
         <button
-          className="md:hidden"
-          style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer' }}
+          className="navbar-hamburger"
+          style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer' }}
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
         >

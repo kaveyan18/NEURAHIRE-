@@ -228,3 +228,30 @@ body {
   --muted: rgba(255,255,255,0.45);
   --border: rgba(255,255,255,0.08);
 }
+
+/* ─────────────────────────────────────────
+   Navbar responsive visibility
+───────────────────────────────────────── */
+/* Desktop: show nav links & actions, hide hamburger */
+.navbar-desktop-links {
+  display: flex;
+}
+.navbar-desktop-actions {
+  display: flex;
+}
+.navbar-hamburger {
+  display: none;
+}
+
+/* Mobile (< 768px): hide desktop elements, show hamburger */
+@media (max-width: 767px) {
+  .navbar-desktop-links {
+    display: none;
+  }
+  .navbar-desktop-actions {
+    display: none;
+  }
+  .navbar-hamburger {
+    display: block;
+  }
+}
