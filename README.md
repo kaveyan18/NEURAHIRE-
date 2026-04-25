@@ -77,26 +77,9 @@ npm install
 cd ..
 ```
 
-### 4. Configure environment variables
 
-Create a `.env` file inside the `server/` directory:
 
-```env
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
-GEMINI_API_KEY=your_google_gemini_api_key
 
-RAZORPAY_KEY_ID=rzp_test_your_razorpay_key
-RAZORPAY_KEY_SECRET=your_razorpay_secret
-FRONTEND_URL=http://localhost:5173
-```
-
-Create a `.env` file inside the `client/` directory (for Razorpay UI):
-
-```env
-VITE_RAZORPAY_KEY_ID=rzp_test_your_razorpay_key
-VITE_API_URL=http://localhost:3001/api
-```
 
 > 💡 **Get your free Gemini API key** at [aistudio.google.com](https://aistudio.google.com/app/apikey)
 
@@ -143,34 +126,8 @@ NEURAHIRE-/
 
 ---
 
-## 🚀 Deployment (Vercel & Render)
-
-This application is engineered for immediate deployment.
-
-### 1. Deploying the Backend (Render / Railway)
-1. Set the root build command to `npm install`
-2. Set the start command to `npm start` (or `node server/index.js`)
-3. Add all `server/.env` variables.
-4. **Important**: Whitelist `0.0.0.0/0` in your MongoDB Atlas Network Access.
-
-### 2. Deploying the Frontend (Vercel / Netlify)
-1. Set the framework to **Vite** and root directory to `client`.
-2. Add the `VITE_API_URL` (pointing to your deployed backend) and `VITE_RAZORPAY_KEY_ID`.
-3. *(Optional)* Put your new frontend domain in the backend's `FRONTEND_URL` environment variable for strict CORS protection!
 
 
-
-## 🎨 UI Design
-
-The application uses a **professional light + dark hybrid** design system:
-
-- **Navbar / Shell** — Always dark (`#0c0b17`) for strong brand presence
-- **Content Area** — Light surface (`#f5f4ff` lavender tint) with white cards
-- **Accent** — Purple `#7c6ff7` throughout buttons, badges, and highlights
-- **Status colours** — Semantic green (matched), red (missing), amber (fair match)
-- **Typography** — `Inter` (body) + `Syne` (display headings)
-
----
 
 ## 📜 License
 
