@@ -10,10 +10,11 @@
   <img src="https://img.shields.io/badge/Express-000000?style=flat&logo=express&logoColor=white" />
   <img src="https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white" />
   <img src="https://img.shields.io/badge/Google%20Gemini-8E75B2?style=flat&logo=googlegemini&logoColor=white" />
+  <img src="https://img.shields.io/badge/Razorpay-02042B?style=flat&logo=razorpay&logoColor=white" />
   <img src="https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white" />
 </p>
 
-<h3>AI-powered resume analysis tool that scores your resume against any job description using Google Gemini 2.5 Flash.</h3>
+<h3>Production-ready AI resume analysis SaaS with Google Gemini 2.0 Flash, Razorpay credits, and full ATS reporting.</h3>
 
 </div>
 
@@ -21,14 +22,14 @@
 
 ## ✨ Features
 
-- 🤖 **Gemini AI Analysis** — Powered by Google Gemini 2.5 Flash for intelligent, contextual resume parsing
+- 🤖 **Gemini AI Analysis** — Powered by `gemini-flash-latest` (Gemini 2.0) with exponential backoff & retry logic for reliability
 - 🎯 **ATS Score** — 0–100 compatibility score showing how well your resume matches the job description
 - 🔑 **Keyword Gap Analysis** — Highlights matched keywords (green) and missing keywords (red) side by side
-- 💡 **3 Actionable Suggestions** — Tailored improvement tips to boost your score for each specific role
-- 🔐 **Authentication** — Secure JWT-based user registration and login
+- 💳 **Credits System & Razorpay** — Users receive 2 free credits on signup, with Razorpay integration for seamless Pro upgrades
+- 🚀 **Smart Caching** — Identical resume + JD inputs are hashed via SHA256 and served from the database to save Gemini API costs
+- 🔐 **Production Security** — Hardened backend using `helmet`, strict dynamic CORS, and `express-rate-limit` (100 req / 15m)
 - 📄 **PDF Parsing** — Extracts text from real-world PDF resumes using `pdf-parse`
-- 🎨 **Professional UI** — Light + dark hybrid design, smooth Framer Motion animations, fully responsive
-- 🔒 **Privacy First** — Resumes are processed in memory only, never stored
+- 🎨 **Premium UI** — Glassmorphic light/dark hybrid design, smooth Framer Motion animations, and responsive navigation
 
 ---
 
@@ -38,11 +39,12 @@
 |---|---|
 | **Frontend** | React 18 + Vite, Framer Motion, React Router |
 | **Backend** | Node.js, Express 5 |
-| **Database** | MongoDB + Mongoose |
-| **AI Engine** | Google Gemini 2.5 Flash (`@google/genai`) |
+| **Database** | MongoDB + Mongoose (Caching & Users) |
+| **AI Engine** | Google Gemini 2.0 Flash (`gemini-flash-latest`) |
+| **Payments** | Razorpay SDK |
 | **Auth** | JWT (JSON Web Tokens) + bcryptjs |
-| **PDF Parsing** | pdf-parse v2 |
-| **Styling** | Vanilla CSS (custom design system) |
+| **Security** | Helmet, Express Rate Limit, Dynamic CORS |
+| **PDF Parsing**| `pdf-parse` v2 |
 
 ---
 
@@ -83,6 +85,17 @@ Create a `.env` file inside the `server/` directory:
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_key
 GEMINI_API_KEY=your_google_gemini_api_key
+
+RAZORPAY_KEY_ID=rzp_test_your_razorpay_key
+RAZORPAY_KEY_SECRET=your_razorpay_secret
+FRONTEND_URL=http://localhost:5173
+```
+
+Create a `.env` file inside the `client/` directory (for Razorpay UI):
+
+```env
+VITE_RAZORPAY_KEY_ID=rzp_test_your_razorpay_key
+VITE_API_URL=http://localhost:3001/api
 ```
 
 > 💡 **Get your free Gemini API key** at [aistudio.google.com](https://aistudio.google.com/app/apikey)
@@ -109,22 +122,41 @@ npm run dev
 ```
 NEURAHIRE-/
 ├── client/                     # React frontend (Vite)
+│   ├── vercel.json             # Vercel SPA routing rules
+│   ├── public/
+│   │   └── _redirects          # Netlify SPA routing rules
 │   └── src/
-│       ├── components/         # Navbar, ScoreRing, UploadZone, etc.
-│       ├── context/            # AuthContext (JWT state)
-│       ├── layouts/            # DashboardLayout
-│       └── pages/              # Dashboard, ResultPage, Login, Signup
+│       ├── components/         # PremiumModal, Navbar, UploadZone
+│       ├── context/            # AuthContext (JWT state & credits)
+│       └── pages/              # Dashboard, ResultPage, Login
 │
 ├── server/                     # Express backend
-│   ├── config/                 # OpenAI / Gemini config
-│   ├── controllers/            # analyzeResumeController
+│   ├── app.js                  # Main express config (Security, CORS, Rate Limit)
+│   ├── controllers/            # analyse.controller.js, payment.controller.js
 │   ├── middleware/             # JWT auth middleware
-│   ├── models/                 # User model (Mongoose)
-│   ├── routes/                 # /api/analyse, /api/auth
-│   └── services/               # ai.service.js, pdf.service.js
+│   ├── models/                 # User.js, AnalysisCache.js
+│   ├── routes/                 # /api/analyse, /api/auth, /api/payments
+│   └── services/               # ai.service.js (exponential backoff)
 │
-└── package.json                # Root scripts
+└── package.json                # Root scripts (Starts Node backend)
 ```
+
+---
+
+## 🚀 Deployment (Vercel & Render)
+
+This application is engineered for immediate deployment.
+
+### 1. Deploying the Backend (Render / Railway)
+1. Set the root build command to `npm install`
+2. Set the start command to `npm start` (or `node server/index.js`)
+3. Add all `server/.env` variables.
+4. **Important**: Whitelist `0.0.0.0/0` in your MongoDB Atlas Network Access.
+
+### 2. Deploying the Frontend (Vercel / Netlify)
+1. Set the framework to **Vite** and root directory to `client`.
+2. Add the `VITE_API_URL` (pointing to your deployed backend) and `VITE_RAZORPAY_KEY_ID`.
+3. *(Optional)* Put your new frontend domain in the backend's `FRONTEND_URL` environment variable for strict CORS protection!
 
 
 
