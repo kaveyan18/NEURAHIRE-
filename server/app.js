@@ -14,7 +14,7 @@ app.use(helmet());
 // 2. Strict CORS
 // Only allow requests from your frontend domain in production
 const allowedOrigins = process.env.NODE_ENV === 'production' 
-  ? [process.env.FRONTEND_URL || 'https://neurahire-seven.vercel.app'] 
+  ? [process.env.FRONTEND_URL || 'https://neurahire-nh.vercel.app'] 
   : ['http://localhost:5173', 'http://localhost:3000', process.env.FRONTEND_URL].filter(Boolean);
 
 app.use(cors({
