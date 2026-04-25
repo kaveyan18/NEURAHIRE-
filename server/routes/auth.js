@@ -39,7 +39,8 @@ router.post('/register', async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        credits: user.credits
       }
     });
 
@@ -84,13 +85,34 @@ router.post('/login', async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        credits: user.credits
       }
     });
 
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Server error during login' });
+  }
+});
+
+// GET /api/auth/me
+router.get('/me', require('../middleware/auth').verifyToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select('-password');
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.status(200).json({
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        credits: user.credits
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error fetching user profile' });
   }
 });
 

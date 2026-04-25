@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  credits: {
+    type: Number,
+    default: 2 // Start with 2 free analyses
   }
 });
 

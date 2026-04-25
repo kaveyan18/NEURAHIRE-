@@ -13,7 +13,7 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('http://localhost:3001/api/auth/login', { email, password });
+      const { data } = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:3001/api'}/auth/login`, { email, password });
       login(data.token, data.user);
       navigate('/analyse');
     } catch (err) {

@@ -19,7 +19,7 @@ export default function SignupPage() {
     }
 
     try {
-      const { data } = await axios.post('http://localhost:3001/api/auth/register', { name, email, password });
+      const { data } = await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:3001/api'}/auth/register`, { name, email, password });
       login(data.token, data.user);
       navigate('/analyse');
     } catch (err) {

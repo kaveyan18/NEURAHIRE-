@@ -2,6 +2,7 @@ import { useState, useContext, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext.jsx';
+import PremiumModal from '../components/PremiumModal';
 
 const WORD_COUNT_WARN = 50;
 
@@ -20,7 +21,7 @@ const STEPS = [
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { user, token } = useContext(AuthContext);
+  const { user, token, updateUser } = useContext(AuthContext);
   const inputRef = useRef(null);
 
   const [selectedFile, setSelectedFile] = useState(null);
@@ -30,6 +31,7 @@ export default function Dashboard() {
   const [error, setError] = useState(null);
   const [dragging, setDragging] = useState(false);
   const [jdFocused, setJdFocused] = useState(false);
+  const [premiumModalOpen, setPremiumModalOpen] = useState(false);
 
   const wordCount = jobDescription.trim() ? jobDescription.trim().split(/\s+/).length : 0;
   const canAnalyse = !!selectedFile && wordCount >= WORD_COUNT_WARN;
@@ -62,18 +64,35 @@ export default function Dashboard() {
       const formData = new FormData();
       formData.append('resume', selectedFile);
       formData.append('jobDescription', jobDescription);
-      const response = await fetch('http://localhost:3001/api/analyse', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001/api'}/analyse`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData,
       });
-      if (!response.ok) { const err = await response.json(); throw new Error(err.error || 'Analysis failed'); }
+      
+      if (!response.ok) { 
+        if (response.status === 403) {
+          setPremiumModalOpen(true);
+          throw new Error('Insufficient credits to perform analysis.');
+        }
+        const err = await response.json(); 
+        throw new Error(err.error || 'Analysis failed'); 
+      }
+      
       const result = await response.json();
       [t1, t2, t3].forEach(clearTimeout);
+      
+      // Instantly deduct 1 credit on frontend to match backend
+      if (user && user.credits > 0) {
+        updateUser({ ...user, credits: user.credits - 1 });
+      }
+
       navigate('/analyse/result', { state: { result, fileName: selectedFile.name, jobDescription } });
     } catch (err) {
       [t1, t2, t3].forEach(clearTimeout);
-      setError(err.message);
+      if (err.message !== 'Insufficient credits to perform analysis.') {
+        setError(err.message);
+      }
     } finally { setLoading(false); }
   };
 
@@ -402,6 +421,8 @@ export default function Dashboard() {
         @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
       `}</style>
+
+      <PremiumModal isOpen={premiumModalOpen} onClose={() => setPremiumModalOpen(false)} />
     </div>
   );
 }
