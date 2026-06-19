@@ -1,8 +1,6 @@
-const crypto = require('crypto');
 const pdfService = require('../services/pdf.service');
-const aiService = require('../services/ai.service');
+const { analyzeWithATS } = require('../services/ats.service');
 const User = require('../models/User');
-const AnalysisCache = require('../models/AnalysisCache');
 
 const analyzeResumeController = async (req, res) => {
   console.log("Received request at /api/analyse");
@@ -51,36 +49,23 @@ const analyzeResumeController = async (req, res) => {
       });
     }
 
-    // Cache Check
-    const hashData = resumeText + jobDescription;
-    const hash = crypto.createHash('sha256').update(hashData).digest('hex');
-
-    const cachedAnalysis = await AnalysisCache.findOne({ hash });
-    if (cachedAnalysis) {
-      console.log("Cache hit! Returning cached analysis result.");
-      user.credits -= 1;
-      await user.save();
-      return res.status(200).json(cachedAnalysis.result);
-    }
-
-    // Call Gemini AI
+    // Analyse with Gemini API
     let parsedJson;
     try {
-      parsedJson = await aiService.analyzeResume(resumeText, jobDescription);
+      parsedJson = await analyzeWithATS(resumeText, jobDescription);
     } catch (aiError) {
-      console.error("AI service error:", aiError.message);
+      console.error("Gemini analysis error:", aiError.message);
       return res.status(502).json({
-        error: "AI analysis failed. Please try again in a moment.",
+        error: "Gemini analysis failed. Please try again in a moment.",
         details: aiError.message,
       });
     }
 
-    // Save to Cache & Update User Count
-    await AnalysisCache.create({ hash, result: parsedJson });
+    // Update User Credits
     user.credits -= 1;
     await user.save();
 
-    console.log("Analysis complete. Score:", parsedJson?.score);
+    console.log("Gemini Analysis complete. Score:", parsedJson?.score);
     return res.status(200).json(parsedJson);
 
   } catch (error) {
