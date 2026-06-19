@@ -50,5 +50,3 @@ app.use('/api/analyse', analyseRoutes);
 app.use('/api/payments', paymentRoutes);
 
 module.exports = app;
-
-// force restart
