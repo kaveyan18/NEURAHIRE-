@@ -1,5 +1,5 @@
 const pdfService = require('../services/pdf.service');
-const { analyzeWithATS } = require('../services/ats.service');
+const atsService = require('../services/ats.service');
 const User = require('../models/User');
 
 const analyzeResumeController = async (req, res) => {
@@ -26,9 +26,9 @@ const analyzeResumeController = async (req, res) => {
       return res.status(401).json({ error: "User not found." });
     }
     if (user.credits < 1) {
-      return res.status(403).json({ 
-        error: "Insufficient credits", 
-        message: "You have run out of credits. Please purchase more to continue analysing resumes." 
+      return res.status(403).json({
+        error: "Insufficient credits",
+        message: "You have run out of credits. Please purchase more to continue analysing resumes."
       });
     }
 
@@ -49,14 +49,14 @@ const analyzeResumeController = async (req, res) => {
       });
     }
 
-    // Analyse with Gemini API
+    // Call ATS engine
     let parsedJson;
     try {
-      parsedJson = await analyzeWithATS(resumeText, jobDescription);
+      parsedJson = await atsService.analyzeWithATS(resumeText, jobDescription);
     } catch (aiError) {
-      console.error("Gemini analysis error:", aiError.message);
+      console.error("ATS service error:", aiError.message);
       return res.status(502).json({
-        error: "Gemini analysis failed. Please try again in a moment.",
+        error: "ATS analysis failed. Please try again in a moment.",
         details: aiError.message,
       });
     }
@@ -65,7 +65,7 @@ const analyzeResumeController = async (req, res) => {
     user.credits -= 1;
     await user.save();
 
-    console.log("Gemini Analysis complete. Score:", parsedJson?.score);
+    console.log("ATS Analysis complete. Score:", parsedJson?.score);
     return res.status(200).json(parsedJson);
 
   } catch (error) {
