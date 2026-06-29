@@ -1,4 +1,4 @@
-import { useState, useContext, useRef } from 'react';
+import { useState, useContext, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext.jsx';
@@ -32,6 +32,12 @@ export default function Dashboard() {
   const [dragging, setDragging] = useState(false);
   const [jdFocused, setJdFocused] = useState(false);
   const [premiumModalOpen, setPremiumModalOpen] = useState(false);
+
+  // Restore JD from sessionStorage so "Analyse Again" doesn't lose the text
+  useEffect(() => {
+    const saved = sessionStorage.getItem('nh_jd');
+    if (saved) setJobDescription(saved);
+  }, []);
 
   const wordCount = jobDescription.trim() ? jobDescription.trim().split(/\s+/).length : 0;
   const canAnalyse = !!selectedFile && wordCount >= WORD_COUNT_WARN;
@@ -87,6 +93,8 @@ export default function Dashboard() {
         updateUser({ ...user, credits: user.credits - 1 });
       }
 
+      // Persist JD so "Analyse Again" doesn't lose it
+      sessionStorage.setItem('nh_jd', jobDescription);
       navigate('/analyse/result', { state: { result, fileName: selectedFile.name, jobDescription } });
     } catch (err) {
       [t1, t2, t3].forEach(clearTimeout);

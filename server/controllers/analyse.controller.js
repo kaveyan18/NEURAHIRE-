@@ -1,3 +1,4 @@
+// server/controllers/analyse.controller.js
 const pdfService = require('../services/pdf.service');
 const atsService = require('../services/ats.service');
 const User = require('../models/User');
@@ -19,7 +20,7 @@ const analyzeResumeController = async (req, res) => {
     console.log(`File: ${req.file.originalname} (${req.file.size} bytes)`);
     console.log(`Job description length: ${jobDescription.length} characters`);
 
-    // User Limit Check
+    // User credit check
     const userId = req.user.userId;
     const user = await User.findById(userId);
     if (!user) {
@@ -49,24 +50,27 @@ const analyzeResumeController = async (req, res) => {
       });
     }
 
-    // Call ATS engine
-    let parsedJson;
+    // Run the ATS pipeline
+    let result;
     try {
-      parsedJson = await atsService.analyzeWithATS(resumeText, jobDescription);
+      result = await atsService.analyzeWithATS(resumeText, jobDescription);
     } catch (aiError) {
       console.error("ATS service error:", aiError.message);
-      return res.status(502).json({
+
+      // Return a 400 for validation errors from the ATS layer, 502 otherwise
+      const status = aiError.statusCode === 400 ? 400 : 502;
+      return res.status(status).json({
         error: "ATS analysis failed. Please try again in a moment.",
         details: aiError.message,
       });
     }
 
-    // Update User Credits
+    // Deduct one credit
     user.credits -= 1;
     await user.save();
 
-    console.log("ATS Analysis complete. Score:", parsedJson?.score);
-    return res.status(200).json(parsedJson);
+    console.log("ATS Analysis complete. Score:", result?.score?.finalATS);
+    return res.status(200).json(result);
 
   } catch (error) {
     console.error("Unexpected error:", error);
